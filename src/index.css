@@ -1,0 +1,216 @@
+@import './styles/design-tokens.css';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family-body);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Luxury Modern Display Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--color-text-main);
+  line-height: 1.2;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+button:active {
+  transform: scale(0.985);
+}
+
+/* Luminous Text Helpers */
+.text-aurora {
+  background: var(--gradient-aurora-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-metallic {
+  background: var(--gradient-metallic-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Luxury Glass Cards */
+.glass-panel-dark {
+  background: var(--color-bg-dark-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-border-dark);
+  box-shadow: var(--shadow-dark-card);
+  border-radius: var(--radius-lg);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-dark:hover {
+  border-color: var(--color-border-glow);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px -5px rgba(0, 245, 160, 0.22);
+}
+
+/* Luminous Action Button */
+.kiosk-btn-primary {
+  background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
+  color: #03141a;
+  font-family: var(--font-family-display);
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  padding: 1.1rem 2.6rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 35px -5px rgba(0, 245, 160, 0.45), 0 8px 24px -6px rgba(0, 217, 245, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  min-height: var(--kiosk-touch-large-height);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kiosk-btn-primary:hover {
+  background: linear-gradient(135deg, #2bf9b2 0%, #30e5ff 100%);
+  box-shadow: 0 0 45px 0px rgba(0, 245, 160, 0.6), 0 10px 28px -4px rgba(0, 217, 245, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Secondary Button */
+.kiosk-btn-secondary {
+  background: #ffffff;
+  color: var(--color-text-main);
+  border: 1.5px solid var(--color-border);
+  font-family: var(--font-family-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  padding: 0.95rem 1.75rem;
+  border-radius: var(--radius-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: var(--kiosk-touch-min-height);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kiosk-btn-secondary:hover {
+  border-color: #00d9f5;
+  background: #f0fdff;
+  color: #0284c7;
+  box-shadow: 0 4px 14px rgba(0, 217, 245, 0.15);
+  transform: translateY(-1.5px);
+}
+
+/* Luxury Choice Tile */
+.kiosk-choice-tile {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 1.3rem 1.6rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  color: var(--color-text-main);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kiosk-choice-tile:hover {
+  border-color: #00d9f5;
+  background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card), 0 0 20px rgba(0, 217, 245, 0.1);
+}
+
+.kiosk-choice-tile.selected {
+  border-color: #059669;
+  background: #f0fdf4;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2), var(--shadow-sm);
+}
+
+/* Red-Flag Safety Alert */
+.red-flag-alert-card {
+  border: 1.5px solid var(--color-danger-500);
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  box-shadow: var(--shadow-danger-glow);
+  border-radius: var(--radius-md);
+}
+
+/* Subtle Active Mic */
+.mic-recording-active {
+  background: #be123c !important;
+  color: #ffffff !important;
+  border-color: #9f1239 !important;
+  box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Print Styles for 80mm Thermal Receipt Slip */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-token-slip, #printable-token-slip * {
+    visibility: visible;
+  }
+  #printable-token-slip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm !important;
+    max-width: 80mm !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
