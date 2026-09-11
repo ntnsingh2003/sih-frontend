@@ -104,17 +104,32 @@ export const playArrivalChime = (isEmergency: boolean = false) => {
   }
 };
 
+export const pathToView = (pathname: string, hash: string = ''): AppViewMode => {
+  const p = (pathname || '').toLowerCase();
+  const h = (hash || '').toLowerCase();
+  if (p.startsWith('/kiosk') || h.includes('kiosk')) return 'KIOSK';
+  if (p.startsWith('/doctor') || h.includes('doctor')) return 'DOCTOR';
+  if (p.startsWith('/login') || h.includes('login')) return 'LOGIN';
+  if (p.startsWith('/simulator') || p.startsWith('/dual-sim') || h.includes('simulator')) return 'DUAL_SIM';
+  return 'LANDING';
+};
+
+export const viewToPath = (view: AppViewMode): string => {
+  switch (view) {
+    case 'KIOSK': return '/kiosk';
+    case 'DOCTOR': return '/doctor';
+    case 'LOGIN': return '/login';
+    case 'DUAL_SIM': return '/simulator';
+    case 'LANDING':
+    default: return '/';
+  }
+};
+
 export const ClinicalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // 1. Initial State with LocalStorage Persistence
   const [patients, setPatients] = useState<PatientQueueItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
+      if (saved) return JSON.parse(saved);
     } catch (e) {
       console.warn('Failed to load persisted patients');
     }
@@ -125,7 +140,9 @@ export const ClinicalProvider: React.FC<{ children: ReactNode }> = ({ children }
     return patients.length > 0 ? patients[0].patient.id : null;
   });
 
-  const [activeView, setActiveViewInternal] = useState<AppViewMode>('LANDING');
+  const [activeView, setActiveViewInternal] = useState<AppViewMode>(() => {
+    return pathToView(window.location.pathname, window.location.hash);
+  });
   const [syncNotification, setSyncNotification] = useState<string | null>(null);
 
   // Authentication State: Starts as null so user must log in
@@ -218,15 +235,26 @@ export const ClinicalProvider: React.FC<{ children: ReactNode }> = ({ children }
       console.warn('BroadcastChannel not supported');
     }
 
+    // Listen to browser Back/Forward navigation
+    const handlePopState = () => {
+      setActiveViewInternal(pathToView(window.location.pathname, window.location.hash));
+    };
+    window.addEventListener('popstate', handlePopState);
+
     return () => {
       if (channel) {
         channel.close();
       }
+      window.removeEventListener('popstate', handlePopState);
     };
   }, []);
 
   const setActiveView = (view: AppViewMode) => {
     setActiveViewInternal(view);
+    const targetPath = viewToPath(view);
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(null, '', targetPath);
+    }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
 
