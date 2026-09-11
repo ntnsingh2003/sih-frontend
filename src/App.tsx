@@ -6,10 +6,35 @@ import { DoctorDashboard } from './components/doctor/DoctorDashboard';
 import { DualDeviceSimulator } from './components/simulator/DualDeviceSimulator';
 import { LoginPage } from './components/auth/LoginPage';
 import { PatientPortal } from './components/patient/PatientPortal';
+import { NurseStation } from './components/nurse/NurseStation';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { PharmacyPortal } from './components/pharmacy/PharmacyPortal';
+import { QueueDisplayBoard } from './components/display/QueueDisplayBoard';
+import { ArchitecturePage } from './components/architecture/ArchitecturePage';
 import { AuditLogModal } from './components/common/AuditLogModal';
 import { ArchitectureModal } from './components/common/ArchitectureModal';
 import { ClinicalProvider, useClinical, AppViewMode } from './context/ClinicalContext';
-import { Monitor, Stethoscope, ShieldCheck, Database, Shield, Sparkles, Layers, RefreshCw, X, Bell, LogIn, LogOut, User } from 'lucide-react';
+import { 
+  Monitor, 
+  Stethoscope, 
+  ShieldCheck, 
+  Database, 
+  Shield, 
+  Sparkles, 
+  Layers, 
+  RefreshCw, 
+  X, 
+  Bell, 
+  LogIn, 
+  LogOut, 
+  User, 
+  Activity, 
+  Pill, 
+  Tv, 
+  Building2,
+  HeartPulse,
+  LayoutGrid
+} from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const {
@@ -31,6 +56,12 @@ const AppContent: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('DOCTOR');
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [isArchitectureModalOpen, setIsArchitectureModalOpen] = useState(false);
+  const [showPortalMenu, setShowPortalMenu] = useState(false);
+
+  // Dedicated full-page TV display mode
+  if (activeView === 'DISPLAY') {
+    return <QueueDisplayBoard />;
+  }
 
   // Standalone dedicated Login Page (completely separate from Landing and internal app dashboard)
   if (activeView === 'LOGIN') {
@@ -112,8 +143,225 @@ const AppContent: React.FC = () => {
             </div>
           </div>
 
-          {/* Header Right: Patient Portal & Staff Login */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Header Right: Portals Switcher & Staff Login */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            {/* Quick Portals Switcher Menu */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowPortalMenu(!showPortalMenu)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.52rem 0.95rem',
+                  borderRadius: '10px',
+                  background: showPortalMenu ? '#0f172a' : isDarkTheme ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
+                  border: isDarkTheme ? '1px solid rgba(255,255,255,0.15)' : '1px solid #cbd5e1',
+                  color: showPortalMenu ? '#ffffff' : isDarkTheme ? '#f1f5f9' : '#334155',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <LayoutGrid size={15} color="#059669" />
+                <span>All Hospital Portals ▾</span>
+              </button>
+
+              {showPortalMenu && (
+                <div 
+                  onClick={() => setShowPortalMenu(false)}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '260px',
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '14px',
+                    padding: '0.5rem',
+                    boxShadow: '0 20px 35px -10px rgba(0,0,0,0.18)',
+                    zIndex: 200,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.25rem'
+                  }}
+                >
+                  <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.72rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Direct Hospital Routes (URL)
+                  </div>
+
+                  <button
+                    onClick={() => setActiveView('PATIENT')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'PATIENT' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'PATIENT' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <User size={15} color="#059669" />
+                    <span>Patient Portal (/patient)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('DOCTOR')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'DOCTOR' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'DOCTOR' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Stethoscope size={15} color="#0284c7" />
+                    <span>Doctor EMR (/doctor)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('NURSE')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'NURSE' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'NURSE' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Activity size={15} color="#10b981" />
+                    <span>Nurse Triage (/nurse)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('PHARMACY')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'PHARMACY' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'PHARMACY' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Pill size={15} color="#0284c7" />
+                    <span>Pharmacy / PMBJP (/pharmacy)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('ADMIN')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'ADMIN' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'ADMIN' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <ShieldCheck size={15} color="#4f46e5" />
+                    <span>Admin & DPDP Audit (/admin)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('DISPLAY')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'transparent',
+                      color: '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Tv size={15} color="#dc2626" />
+                    <span>Waiting Hall TV (/display)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('KIOSK')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: (activeView as string) === 'KIOSK' ? '#ecfdf5' : 'transparent',
+                      color: (activeView as string) === 'KIOSK' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Monitor size={15} color="#059669" />
+                    <span>Patient Kiosk View (/kiosk)</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveView('ARCHITECTURE')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: activeView === 'ARCHITECTURE' ? '#ecfdf5' : 'transparent',
+                      color: activeView === 'ARCHITECTURE' ? '#065f46' : '#1e293b',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <Layers size={15} color="#7c3aed" />
+                    <span>System Architecture (/architecture)</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button
               onClick={() => setActiveView('PATIENT')}
               style={{
@@ -133,7 +381,7 @@ const AppContent: React.FC = () => {
               }}
             >
               <User size={15} color="#059669" />
-              <span>Patient Portal / मरीज पोर्टल</span>
+              <span>Patient Portal</span>
             </button>
 
             {currentUser ? (
@@ -260,11 +508,19 @@ const AppContent: React.FC = () => {
           onOpenDoctor={() => setActiveView('DOCTOR')}
           onOpenLogin={() => setActiveView('LOGIN')}
           onOpenPatient={() => setActiveView('PATIENT')}
-          onOpenArchitecture={() => setIsArchitectureModalOpen(true)}
-          onOpenAudit={() => setIsAuditModalOpen(true)}
+          onOpenArchitecture={() => setActiveView('ARCHITECTURE')}
+          onOpenAudit={() => setActiveView('ADMIN')}
         />
       ) : activeView === 'PATIENT' ? (
         <PatientPortal />
+      ) : activeView === 'NURSE' ? (
+        <NurseStation />
+      ) : activeView === 'ADMIN' ? (
+        <AdminDashboard />
+      ) : activeView === 'PHARMACY' ? (
+        <PharmacyPortal />
+      ) : activeView === 'ARCHITECTURE' ? (
+        <ArchitecturePage />
       ) : activeView === 'KIOSK' ? (
         <KioskView
           onSessionFinished={addPatientSession}

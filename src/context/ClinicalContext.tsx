@@ -6,7 +6,18 @@ import { auditService } from '../services/auditService';
 const STORAGE_KEY = 'medikiosk_active_patients_v2';
 const AUTH_STORAGE_KEY = 'medikiosk_auth_staff_v1';
 
-export type AppViewMode = 'LANDING' | 'LOGIN' | 'KIOSK' | 'DOCTOR' | 'DUAL_SIM' | 'PATIENT';
+export type AppViewMode = 
+  | 'LANDING' 
+  | 'LOGIN' 
+  | 'KIOSK' 
+  | 'DOCTOR' 
+  | 'DUAL_SIM' 
+  | 'PATIENT'
+  | 'NURSE'
+  | 'ADMIN'
+  | 'PHARMACY'
+  | 'DISPLAY'
+  | 'ARCHITECTURE';
 
 export interface StaffUser {
   id: string;
@@ -41,6 +52,14 @@ export const DEMO_STAFF_ACCOUNTS: StaffUser[] = [
     role: 'ADMIN',
     licenseNumber: 'NMC/2012/11029',
     department: 'Hospital Administration & Safety'
+  },
+  {
+    id: 'usr-nair-04',
+    name: 'Rajeev Nair, D.Pharm',
+    email: 'pharmacy.nair@aiims.edu',
+    role: 'TRIAGE_STAFF',
+    licenseNumber: 'PH/DL/4819',
+    department: 'Hospital Pharmacy & Dispensary'
   }
 ];
 
@@ -65,6 +84,7 @@ interface ClinicalContextType {
   clearPreloadedPatient: () => void;
   resetDemoData: () => void;
   dismissSyncNotification: () => void;
+  setSyncNotification: (msg: string | null) => void;
 }
 
 const ClinicalContext = createContext<ClinicalContextType | undefined>(undefined);
@@ -108,6 +128,11 @@ export const pathToView = (pathname: string, hash: string = ''): AppViewMode => 
   const p = (pathname || '').toLowerCase();
   const h = (hash || '').toLowerCase();
   if (p.startsWith('/patient') || p.startsWith('/portal') || h.includes('patient')) return 'PATIENT';
+  if (p.startsWith('/nurse') || p.startsWith('/triage') || h.includes('nurse')) return 'NURSE';
+  if (p.startsWith('/admin') || p.startsWith('/audit') || h.includes('admin')) return 'ADMIN';
+  if (p.startsWith('/pharmacy') || p.startsWith('/dispensary') || h.includes('pharmacy')) return 'PHARMACY';
+  if (p.startsWith('/display') || p.startsWith('/tv') || p.startsWith('/queue') || h.includes('display') || h.includes('tv')) return 'DISPLAY';
+  if (p.startsWith('/architecture') || p.startsWith('/arch') || p.startsWith('/spec') || h.includes('arch')) return 'ARCHITECTURE';
   if (p.startsWith('/kiosk') || h.includes('kiosk')) return 'KIOSK';
   if (p.startsWith('/doctor') || h.includes('doctor')) return 'DOCTOR';
   if (p.startsWith('/login') || h.includes('login')) return 'LOGIN';
@@ -118,6 +143,11 @@ export const pathToView = (pathname: string, hash: string = ''): AppViewMode => 
 export const viewToPath = (view: AppViewMode): string => {
   switch (view) {
     case 'PATIENT': return '/patient';
+    case 'NURSE': return '/nurse';
+    case 'ADMIN': return '/admin';
+    case 'PHARMACY': return '/pharmacy';
+    case 'DISPLAY': return '/display';
+    case 'ARCHITECTURE': return '/architecture';
     case 'KIOSK': return '/kiosk';
     case 'DOCTOR': return '/doctor';
     case 'LOGIN': return '/login';
@@ -355,7 +385,8 @@ export const ClinicalProvider: React.FC<{ children: ReactNode }> = ({ children }
         loginPatient,
         clearPreloadedPatient,
         resetDemoData,
-        dismissSyncNotification
+        dismissSyncNotification,
+        setSyncNotification
       }}
     >
       {children}
