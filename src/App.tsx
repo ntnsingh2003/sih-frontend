@@ -5,6 +5,7 @@ import { KioskView } from './components/kiosk/KioskView';
 import { DoctorDashboard } from './components/doctor/DoctorDashboard';
 import { DualDeviceSimulator } from './components/simulator/DualDeviceSimulator';
 import { LoginPage } from './components/auth/LoginPage';
+import { PatientPortal } from './components/patient/PatientPortal';
 import { AuditLogModal } from './components/common/AuditLogModal';
 import { ArchitectureModal } from './components/common/ArchitectureModal';
 import { ClinicalProvider, useClinical, AppViewMode } from './context/ClinicalContext';
@@ -111,8 +112,30 @@ const AppContent: React.FC = () => {
             </div>
           </div>
 
-          {/* Header Right: Only Login Option */}
+          {/* Header Right: Patient Portal & Staff Login */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <button
+              onClick={() => setActiveView('PATIENT')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.52rem 1.15rem',
+                borderRadius: '9999px',
+                background: activeView === 'PATIENT' ? '#ecfdf5' : '#ffffff',
+                border: activeView === 'PATIENT' ? '1.5px solid #059669' : '1.5px solid #cbd5e1',
+                color: activeView === 'PATIENT' ? '#065f46' : '#334155',
+                fontSize: '0.86rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+                transition: 'all 0.18s ease'
+              }}
+            >
+              <User size={15} color="#059669" />
+              <span>Patient Portal / मरीज पोर्टल</span>
+            </button>
+
             {currentUser ? (
               <div style={{
                 display: 'flex',
@@ -190,7 +213,7 @@ const AppContent: React.FC = () => {
                 }}
               >
                 <LogIn size={15} />
-                <span>Login</span>
+                <span>Doctor Login</span>
               </button>
             )}
           </div>
@@ -236,9 +259,12 @@ const AppContent: React.FC = () => {
           onStartKiosk={() => setActiveView('KIOSK')}
           onOpenDoctor={() => setActiveView('DOCTOR')}
           onOpenLogin={() => setActiveView('LOGIN')}
+          onOpenPatient={() => setActiveView('PATIENT')}
           onOpenArchitecture={() => setIsArchitectureModalOpen(true)}
           onOpenAudit={() => setIsAuditModalOpen(true)}
         />
+      ) : activeView === 'PATIENT' ? (
+        <PatientPortal />
       ) : activeView === 'KIOSK' ? (
         <KioskView
           onSessionFinished={addPatientSession}

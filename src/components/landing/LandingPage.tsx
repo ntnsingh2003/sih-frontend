@@ -23,6 +23,7 @@ interface Props {
   onStartKiosk: () => void;
   onOpenDoctor: () => void;
   onOpenLogin: () => void;
+  onOpenPatient: () => void;
   onOpenArchitecture: () => void;
   onOpenAudit: () => void;
 }
@@ -31,6 +32,7 @@ export const LandingPage: React.FC<Props> = ({
   onStartKiosk,
   onOpenDoctor,
   onOpenLogin,
+  onOpenPatient,
   onOpenArchitecture,
   onOpenAudit
 }) => {
@@ -138,31 +140,57 @@ export const LandingPage: React.FC<Props> = ({
             MediKiosk collapses lengthy hospital queues from 35 minutes to under 3 minutes through voice-first multilingual intake, real-time deterministic triage, paper prescription OCR, and HL7 FHIR interoperability.
           </p>
 
-          {/* Action CTAs: Only Login Option */}
+          {/* Action CTAs: Patient Portal & Staff Login */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '4.8rem' }}>
+            {/* Patient Portal Button */}
             <button
-              onClick={onOpenLogin}
+              onClick={onOpenPatient}
               style={{
-                background: 'linear-gradient(135deg, #059669 0%, #0284c7 100%)',
+                background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
                 color: '#ffffff',
                 fontFamily: 'var(--font-family-display)',
                 fontWeight: 800,
-                fontSize: '1.18rem',
+                fontSize: '1.15rem',
                 letterSpacing: '-0.02em',
-                padding: '1.15rem 3rem',
+                padding: '1.1rem 2.6rem',
                 borderRadius: '9999px',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.85rem',
-                boxShadow: '0 8px 30px rgba(5, 150, 105, 0.4), 0 4px 15px rgba(2, 132, 199, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
+                gap: '0.75rem',
+                boxShadow: '0 8px 30px rgba(5, 150, 105, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
                 transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                 cursor: 'pointer'
               }}
             >
-              <LogIn size={22} color="#ffffff" />
-              <span>Sign In / Login</span>
-              <ArrowRight size={20} strokeWidth={2.5} />
+              <HeartPulse size={22} color="#00f5a0" />
+              <span>Patient Portal / मरीज पोर्टल</span>
+              <ArrowRight size={19} strokeWidth={2.5} />
+            </button>
+
+            {/* Doctor / Staff Login Button */}
+            <button
+              onClick={onOpenLogin}
+              style={{
+                background: '#ffffff',
+                color: '#0f172a',
+                fontFamily: 'var(--font-family-display)',
+                fontWeight: 800,
+                fontSize: '1.12rem',
+                letterSpacing: '-0.02em',
+                padding: '1.1rem 2.4rem',
+                borderRadius: '9999px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.06)',
+                border: '2px solid #cbd5e1',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                cursor: 'pointer'
+              }}
+            >
+              <LogIn size={20} color="#0284c7" />
+              <span>Doctor / Staff Login</span>
             </button>
           </div>
 

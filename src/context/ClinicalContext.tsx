@@ -6,7 +6,7 @@ import { auditService } from '../services/auditService';
 const STORAGE_KEY = 'medikiosk_active_patients_v2';
 const AUTH_STORAGE_KEY = 'medikiosk_auth_staff_v1';
 
-export type AppViewMode = 'LANDING' | 'LOGIN' | 'KIOSK' | 'DOCTOR' | 'DUAL_SIM';
+export type AppViewMode = 'LANDING' | 'LOGIN' | 'KIOSK' | 'DOCTOR' | 'DUAL_SIM' | 'PATIENT';
 
 export interface StaffUser {
   id: string;
@@ -107,6 +107,7 @@ export const playArrivalChime = (isEmergency: boolean = false) => {
 export const pathToView = (pathname: string, hash: string = ''): AppViewMode => {
   const p = (pathname || '').toLowerCase();
   const h = (hash || '').toLowerCase();
+  if (p.startsWith('/patient') || p.startsWith('/portal') || h.includes('patient')) return 'PATIENT';
   if (p.startsWith('/kiosk') || h.includes('kiosk')) return 'KIOSK';
   if (p.startsWith('/doctor') || h.includes('doctor')) return 'DOCTOR';
   if (p.startsWith('/login') || h.includes('login')) return 'LOGIN';
@@ -116,6 +117,7 @@ export const pathToView = (pathname: string, hash: string = ''): AppViewMode => 
 
 export const viewToPath = (view: AppViewMode): string => {
   switch (view) {
+    case 'PATIENT': return '/patient';
     case 'KIOSK': return '/kiosk';
     case 'DOCTOR': return '/doctor';
     case 'LOGIN': return '/login';
