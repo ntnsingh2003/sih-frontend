@@ -412,19 +412,11 @@ https://medikiosk.abdm.gov.in/records/${patient.id}?token=${session.tokenNumber}
         <button
           type="button"
           onClick={onResetKiosk}
-          className="kiosk-btn-secondary"
+          className="kiosk-btn-primary"
+          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}
         >
           <RotateCcw size={20} />
           <span>New Patient / अगला मरीज</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => onOpenDoctorPortal(patient.id)}
-          className="kiosk-btn-primary"
-        >
-          <span>Open in Doctor OPD Portal</span>
-          <ArrowRight size={20} />
         </button>
       </div>
 

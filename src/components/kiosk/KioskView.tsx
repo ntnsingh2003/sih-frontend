@@ -16,7 +16,7 @@ import { KioskCompletionScreen } from './KioskCompletionScreen';
 import { InactivityPurgeModal } from './InactivityPurgeModal';
 import { PatientQueueItem } from '../../data/mockPatients';
 import { useClinical } from '../../context/ClinicalContext';
-import { Volume2, VolumeX, Eye, Type, ShieldCheck } from 'lucide-react';
+import { Volume2, VolumeX, Eye, Type, ShieldCheck, Home } from 'lucide-react';
 
 interface Props {
   onSessionFinished: (newItem: PatientQueueItem) => void;
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const KioskView: React.FC<Props> = ({ onSessionFinished, onNavigateToDoctor }) => {
-  const { preloadedPatient, preloadedMode, clearPreloadedPatient } = useClinical();
+  const { preloadedPatient, preloadedMode, clearPreloadedPatient, setActiveView } = useClinical();
 
   const [step, setStep] = useState<number>(0);
   const [lang, setLang] = useState<SupportedLanguage>('en');
@@ -374,12 +374,34 @@ export const KioskView: React.FC<Props> = ({ onSessionFinished, onNavigateToDoct
                 color: '#dc2626',
                 border: '1px solid #fee2e2',
                 fontWeight: 600,
-                fontSize: '0.9rem'
+                fontSize: '0.9rem',
+                cursor: 'pointer'
               }}
             >
               Cancel / Start Over
             </button>
           )}
+
+          <button
+            onClick={() => setActiveView('LANDING')}
+            title="Exit Kiosk / मुख्य पृष्ठ"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.45rem 0.85rem',
+              borderRadius: 'var(--kiosk-radius-full)',
+              background: '#f8fafc',
+              color: '#475569',
+              border: '1px solid var(--color-border)',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              cursor: 'pointer'
+            }}
+          >
+            <Home size={16} />
+            <span>Home</span>
+          </button>
         </div>
       </header>
 
